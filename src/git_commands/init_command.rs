@@ -12,3 +12,22 @@ impl GitCommand for InitCommand {
         println!("Initialized git directory")
     }
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_init_command() {
+        let current_dir = std::env::current_dir()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .to_owned();
+        let temp_path = format!("{}/temp", &current_dir);
+        std::env::set_current_dir(&temp_path).unwrap();
+        let command = InitCommand {};
+        let args: Vec<String> = Vec::new();
+        command.execute(&args);
+        std::fs::remove_dir_all(".git").expect("Failed to remove .git directory");
+    }
+}
